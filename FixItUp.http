@@ -1,0 +1,6 @@
+@FixItUp_HostAddress = http://localhost:5245
+
+GET {{FixItUp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
