@@ -21,6 +21,8 @@
 
         public decimal AvailableBalance { get; set; }
         public decimal PendingClearance { get; set; }
+
+        public virtual ICollection<WorkerSkill> SpecializedSkills { get; set; }
     }
 
 }

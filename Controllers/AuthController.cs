@@ -1,6 +1,8 @@
-﻿using FixItUp.Data;
+﻿using FixItUp.DTOs;
+using FixItUp.Data;
 using FixItUp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace FixItUp.Controllers
@@ -17,10 +19,32 @@ namespace FixItUp.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register(User user)
+        public IActionResult Register(RegisterUserDTO request)
         {
+            var user = new User
+            {
+                FullName = request.FullName,
+                Email = request.Email,
+                Role = request.Role,
+                PasswordHash = request.Password // In real world, hash this!
+            };
+
             _db.Users.Add(user);
-            _db.SaveChanges();
+            _db.SaveChanges(); // Save to generate Id
+
+            if (request.Role == "Worker" && request.CategoryIds != null && request.CategoryIds.Any())
+            {
+                foreach (var catId in request.CategoryIds)
+                {
+                    _db.WorkerSkills.Add(new WorkerSkill
+                    {
+                        UserId = user.Id,
+                        CategoryId = catId
+                    });
+                }
+                _db.SaveChanges();
+            }
+
             return Ok();
         }
 

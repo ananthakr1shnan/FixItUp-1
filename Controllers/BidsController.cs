@@ -27,6 +27,21 @@ namespace FixItUp.Controllers
             if (workerBusy)
                 return BadRequest("Worker already busy");
 
+            // Check if worker has the required skill
+            var taskCategory = _db.Tasks
+                .Where(t => t.Id == bid.TaskId)
+                .Select(t => t.Category)
+                .FirstOrDefault();
+
+            if (taskCategory != null)
+            {
+                var hasSkill = _db.WorkerSkills
+                    .Any(ws => ws.UserId == bid.WorkerId && ws.Category.Name == taskCategory);
+
+                if (!hasSkill)
+                    return BadRequest("Worker does not have the required skill for this task.");
+            }
+
             bid.CreatedAt = DateTime.UtcNow;
             _db.Bids.Add(bid);
             _db.SaveChanges();

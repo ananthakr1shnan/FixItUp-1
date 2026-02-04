@@ -30,9 +30,27 @@ namespace FixItUp.Controllers
         }
 
         [HttpGet("nearby")]
-        public IActionResult Nearby()
+        public IActionResult Nearby(int? workerId = null)
         {
-            return Ok(_db.Tasks.Where(t => t.Status == "Posted").ToList());
+            var query = _db.Tasks.Where(t => t.Status == "Posted");
+
+            if (workerId.HasValue)
+            {
+                // Get worker's skill names
+                var skillNames = _db.WorkerSkills
+                    .Where(ws => ws.UserId == workerId)
+                    .Select(ws => ws.Category.Name)
+                    .ToList();
+
+                // Simplify matching by assuming Task.Category is the Name string
+                // In production might need normalizing or ID usage on Task
+                if (skillNames.Any())
+                {
+                    query = query.Where(t => skillNames.Contains(t.Category));
+                }
+            }
+
+            return Ok(query.ToList());
         }
 
         [HttpPatch("{id}/status")]
