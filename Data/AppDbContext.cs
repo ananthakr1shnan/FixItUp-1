@@ -73,6 +73,22 @@ namespace FixItUp.Data
                       .HasDefaultValue(0);
             });
 
+            // Seed Admin User
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 999, // Static ID for Admin
+                FullName = "System Administrator",
+                Email = "admin@fixitup.com",
+                PasswordHash = "admin123", // Plain text for demo; in production use hashing
+                Role = "Admin",
+                IsAcceptingJobs = false,
+                TrustScore = 100,
+                IsVerifiedPro = true,
+                JobCompletionRate = 0,
+                AvailableBalance = 0,
+                PendingClearance = 0
+            });
+
             // ======================
             // TASK CONFIGURATION
             // ======================
