@@ -5,37 +5,26 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-var raw = builder.Configuration.GetConnectionString("DefaultConnection");
+var raw = Environment.GetEnvironmentVariable("MYSQL_URL");
 
 if (string.IsNullOrWhiteSpace(raw))
 {
-    throw new Exception("DefaultConnection is missing. Check Railway variables.");
+    throw new Exception("MYSQL_URL environment variable not found.");
 }
 
-string connectionString;
+var uri = new Uri(raw);
 
-// CASE 1: Railway-style mysql:// URL
-if (raw.StartsWith("mysql://", StringComparison.OrdinalIgnoreCase))
-{
-    var uri = new Uri(raw);
+var userInfo = uri.UserInfo.Split(':', 2);
+var username = userInfo[0];
+var password = userInfo.Length > 1 ? userInfo[1] : "";
 
-    var userInfo = uri.UserInfo.Split(':', 2);
-    var username = userInfo[0];
-    var password = userInfo.Length > 1 ? userInfo[1] : "";
-
-    connectionString =
-        $"Server={uri.Host};" +
-        $"Port={uri.Port};" +
-        $"Database={uri.AbsolutePath.TrimStart('/')};" +
-        $"User={username};" +
-        $"Password={password};" +
-        $"SslMode=Required;";
-}
-else
-{
-    // CASE 2: Already a normal MySQL connection string
-    connectionString = raw;
-}
+var connectionString =
+    $"Server={uri.Host};" +
+    $"Port={uri.Port};" +
+    $"Database={uri.AbsolutePath.TrimStart('/')};" +
+    $"User={username};" +
+    $"Password={password};" +
+    $"SslMode=Required;";
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(
@@ -62,7 +51,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
+
 app.UseCors("AllowAngular");
 app.UseAuthorization();
 app.MapControllers();
