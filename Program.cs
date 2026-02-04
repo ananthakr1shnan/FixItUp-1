@@ -1,26 +1,37 @@
 using FixItUp.Data;
 using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+var mysqlUrl = Environment.GetEnvironmentVariable("MYSQL_URL");
+if (string.IsNullOrEmpty(mysqlUrl))
+{
+    throw new Exception("MYSQL_URL environment variable not found");
+}
+
+var uri = new Uri(mysqlUrl);
+
+var userInfo = uri.UserInfo.Split(':', 2);
+var username = userInfo[0];
+var password = userInfo.Length > 1 ? userInfo[1] : "";
+
+var connectionString =
+    $"Server={uri.Host};" +
+    $"Port={uri.Port};" +
+    $"Database={uri.AbsolutePath.TrimStart('/')};" +
+    $"User={username};" +
+    $"Password={password};" +
+    $"SslMode=Preferred;";
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+    options.UseMySql(
+        connectionString,
+        ServerVersion.AutoDetect(connectionString)
+    )
 );
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAngular",
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:4200")
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
-});
-
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
@@ -28,11 +39,5 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-// app.UseHttpsRedirection(); // Disabled for local dev to avoid redirect issues
-app.UseCors("AllowAngular");
-app.UseAuthorization();
 app.MapControllers();
-
 app.Run();
-
-

@@ -10,6 +10,9 @@ namespace FixItUp.Data
         {
         }
 
+        // ======================
+        // DB SETS
+        // ======================
         public DbSet<User> Users { get; set; }
         public DbSet<TaskEntity> Tasks { get; set; }
         public DbSet<Bid> Bids { get; set; }
@@ -107,7 +110,7 @@ namespace FixItUp.Data
                       .HasPrecision(18, 2);
 
                 entity.Property(t => t.CreatedAt)
-                      .HasDefaultValueSql("GETUTCDATE()");
+                      .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasOne<User>()
                       .WithMany()
@@ -128,9 +131,6 @@ namespace FixItUp.Data
                 entity.Property(b => b.Amount)
                       .HasPrecision(18, 2)
                       .IsRequired();
-
-                entity.Property(b => b.CreatedAt)
-                      .HasDefaultValueSql("GETUTCDATE()");
 
                 entity.HasOne<TaskEntity>()
                       .WithMany()
