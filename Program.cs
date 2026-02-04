@@ -5,30 +5,37 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// ===== FIX: Railway MYSQL_URL ? EF Core compatible connection string =====
-var rawUrl = builder.Configuration.GetConnectionString("DefaultConnection");
+var raw = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Safety check
-if (string.IsNullOrWhiteSpace(rawUrl))
+if (string.IsNullOrWhiteSpace(raw))
 {
-    throw new Exception("Database connection string is missing.");
+    throw new Exception("DefaultConnection is missing. Check Railway variables.");
 }
 
-var uri = new Uri(rawUrl);
+string connectionString;
 
-var userInfo = uri.UserInfo.Split(':', 2);
-var username = userInfo[0];
-var password = userInfo.Length > 1 ? userInfo[1] : "";
+// CASE 1: Railway-style mysql:// URL
+if (raw.StartsWith("mysql://", StringComparison.OrdinalIgnoreCase))
+{
+    var uri = new Uri(raw);
 
-var connectionString =
-    $"Server={uri.Host};" +
-    $"Port={uri.Port};" +
-    $"Database={uri.AbsolutePath.TrimStart('/')};" +
-    $"User={username};" +
-    $"Password={password};" +
-    $"SslMode=Required;";
+    var userInfo = uri.UserInfo.Split(':', 2);
+    var username = userInfo[0];
+    var password = userInfo.Length > 1 ? userInfo[1] : "";
 
-// ========================================================================
+    connectionString =
+        $"Server={uri.Host};" +
+        $"Port={uri.Port};" +
+        $"Database={uri.AbsolutePath.TrimStart('/')};" +
+        $"User={username};" +
+        $"Password={password};" +
+        $"SslMode=Required;";
+}
+else
+{
+    // CASE 2: Already a normal MySQL connection string
+    connectionString = raw;
+}
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(
@@ -39,13 +46,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngular",
-        policy =>
-        {
-            policy.AllowAnyOrigin()
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
 });
 
 builder.Services.AddEndpointsApiExplorer();
