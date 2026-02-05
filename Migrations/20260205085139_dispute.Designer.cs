@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FixItUp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260205041039_payment2")]
-    partial class payment2
+    [Migration("20260205085139_dispute")]
+    partial class dispute
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,9 +38,7 @@ namespace FixItUp.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("EstimatedHours")
                         .HasColumnType("int");
@@ -67,6 +65,13 @@ namespace FixItUp.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EvidenceUrl")
                         .IsRequired()
@@ -297,7 +302,7 @@ namespace FixItUp.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
@@ -439,7 +444,7 @@ namespace FixItUp.Migrations
                             AvailableBalance = 0m,
                             AvgResponseTime = 0,
                             City = "",
-                            CreatedAt = new DateTime(2026, 2, 5, 4, 10, 34, 484, DateTimeKind.Utc).AddTicks(5173),
+                            CreatedAt = new DateTime(2026, 2, 5, 8, 51, 38, 271, DateTimeKind.Utc).AddTicks(8015),
                             Email = "admin@fixitup.com",
                             FullName = "System Administrator",
                             IsAcceptingJobs = false,

@@ -17,10 +17,8 @@ namespace FixItUp.DTOs
         [Required]
         public string Role { get; set; } // Customer, Worker
 
-        [Required]
         public string State { get; set; }
 
-        [Required]
         public string City { get; set; }
 
         // For Workers only

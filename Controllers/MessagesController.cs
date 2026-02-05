@@ -52,7 +52,7 @@ namespace FixItUp.Controllers
                 var lastMessage = c.LastMessage;
                 var otherUserId = lastMessage != null && lastMessage.SenderId == userId 
                     ? lastMessage.ReceiverId 
-                    : (lastMessage?.ReceiverId ?? 0);
+                    : (lastMessage?.SenderId ?? 0);
                 var otherUser = _db.Users.Find(otherUserId);
 
                 return new
