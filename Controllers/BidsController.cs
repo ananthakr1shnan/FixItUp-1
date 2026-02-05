@@ -59,6 +59,7 @@ namespace FixItUp.Controllers
             if (task == null) return NotFound();
 
             task.AssignedWorkerId = bid.WorkerId;
+            task.AcceptedBidId = bidId; // Store the accepted bid ID
             task.Status = "Accepted";
 
             var worker = _db.Users.Find(bid.WorkerId);

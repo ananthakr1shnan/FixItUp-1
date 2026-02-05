@@ -17,6 +17,8 @@ namespace FixItUp.Data
         public DbSet<TaskChecklistItem> TaskChecklistItems { get; set; }
         public DbSet<ServiceCategory> ServiceCategories { get; set; }
         public DbSet<WorkerSkill> WorkerSkills { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Payment> Payments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -167,6 +169,41 @@ namespace FixItUp.Data
                       .WithMany()
                       .HasForeignKey(c => c.TaskId)
                       .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // ======================
+            // PAYMENT CONFIGURATION
+            // ======================
+            modelBuilder.Entity<Payment>(entity =>
+            {
+                entity.Property(p => p.Amount)
+                      .HasPrecision(18, 2)
+                      .IsRequired();
+
+                entity.Property(p => p.Status)
+                      .IsRequired()
+                      .HasDefaultValue("Pending");
+
+                entity.Property(p => p.CreatedAt)
+                      .HasDefaultValueSql("GETUTCDATE()");
+
+                // Task relationship with cascade delete
+                entity.HasOne(p => p.Task)
+                      .WithMany()
+                      .HasForeignKey(p => p.TaskId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                // Customer relationship with no action to avoid cascade cycles
+                entity.HasOne(p => p.Customer)
+                      .WithMany()
+                      .HasForeignKey(p => p.CustomerId)
+                      .OnDelete(DeleteBehavior.NoAction);
+
+                // Worker relationship with no action to avoid cascade cycles
+                entity.HasOne(p => p.Worker)
+                      .WithMany()
+                      .HasForeignKey(p => p.WorkerId)
+                      .OnDelete(DeleteBehavior.NoAction);
             });
         }
     }

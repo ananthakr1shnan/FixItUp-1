@@ -26,6 +26,8 @@ namespace FixItUp.Controllers
                 FullName = request.FullName,
                 Email = request.Email,
                 Role = request.Role,
+                State = request.State,
+                City = request.City,
                 PasswordHash = request.Password // In real world, hash this!
             };
 

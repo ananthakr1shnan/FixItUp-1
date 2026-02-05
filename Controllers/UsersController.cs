@@ -37,6 +37,8 @@ namespace FixItUp.Controllers
                 user.FullName,
                 user.Email,
                 user.Role,
+                user.State,
+                user.City,
                 user.TrustScore,
                 user.JobCompletionRate,
                 user.IsTopRated,

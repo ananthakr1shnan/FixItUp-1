@@ -4,6 +4,7 @@ using FixItUp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FixItUp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260204092308_location")]
+    partial class location
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,87 +92,6 @@ namespace FixItUp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Disputes");
-                });
-
-            modelBuilder.Entity("FixItUp.Models.Message", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("ReceiverId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SenderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TaskId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Messages");
-                });
-
-            modelBuilder.Entity("FixItUp.Models.Payment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Amount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("Pending");
-
-                    b.Property<int>("TaskId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TransactionId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("WorkerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("TaskId");
-
-                    b.HasIndex("WorkerId");
-
-                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("FixItUp.Models.ServiceCategory", b =>
@@ -266,9 +188,6 @@ namespace FixItUp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AcceptedBidId")
-                        .HasColumnType("int");
-
                     b.Property<string>("AfterImageURL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -287,9 +206,6 @@ namespace FixItUp.Migrations
                     b.Property<string>("City")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -334,8 +250,6 @@ namespace FixItUp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AcceptedBidId");
-
                     b.HasIndex("AssignedWorkerId");
 
                     b.HasIndex("CustomerId");
@@ -364,9 +278,6 @@ namespace FixItUp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -379,9 +290,6 @@ namespace FixItUp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsFastBidder")
                         .HasColumnType("bit");
@@ -408,10 +316,6 @@ namespace FixItUp.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasDefaultValue(0m);
 
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -436,11 +340,9 @@ namespace FixItUp.Migrations
                             AvailableBalance = 0m,
                             AvgResponseTime = 0,
                             City = "",
-                            CreatedAt = new DateTime(2026, 2, 5, 6, 0, 0, 566, DateTimeKind.Utc).AddTicks(2654),
                             Email = "admin@fixitup.com",
                             FullName = "System Administrator",
                             IsAcceptingJobs = false,
-                            IsActive = true,
                             IsFastBidder = false,
                             IsTopRated = false,
                             IsVerifiedPro = true,
@@ -448,7 +350,6 @@ namespace FixItUp.Migrations
                             OnTimeArrivalRate = 0.0,
                             PasswordHash = "admin123",
                             PendingClearance = 0m,
-                            Phone = "",
                             Role = "Admin",
                             State = "",
                             TrustScore = 100
@@ -485,33 +386,6 @@ namespace FixItUp.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FixItUp.Models.Payment", b =>
-                {
-                    b.HasOne("FixItUp.Models.User", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("FixItUp.Models.TaskEntity", "Task")
-                        .WithMany()
-                        .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FixItUp.Models.User", "Worker")
-                        .WithMany()
-                        .HasForeignKey("WorkerId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Task");
-
-                    b.Navigation("Worker");
-                });
-
             modelBuilder.Entity("FixItUp.Models.TaskChecklistItem", b =>
                 {
                     b.HasOne("FixItUp.Models.TaskEntity", null)
@@ -523,10 +397,6 @@ namespace FixItUp.Migrations
 
             modelBuilder.Entity("FixItUp.Models.TaskEntity", b =>
                 {
-                    b.HasOne("FixItUp.Models.Bid", "AcceptedBid")
-                        .WithMany()
-                        .HasForeignKey("AcceptedBidId");
-
                     b.HasOne("FixItUp.Models.User", null)
                         .WithMany()
                         .HasForeignKey("AssignedWorkerId")
@@ -537,8 +407,6 @@ namespace FixItUp.Migrations
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("AcceptedBid");
                 });
 
             modelBuilder.Entity("FixItUp.Models.WorkerSkill", b =>
