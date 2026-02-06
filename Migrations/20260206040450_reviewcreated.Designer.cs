@@ -4,6 +4,7 @@ using FixItUp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FixItUp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260206040450_reviewcreated")]
+    partial class reviewcreated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -486,7 +489,7 @@ namespace FixItUp.Migrations
                             AvailableBalance = 0m,
                             AvgResponseTime = 0,
                             City = "",
-                            CreatedAt = new DateTime(2026, 2, 6, 4, 6, 50, 177, DateTimeKind.Utc).AddTicks(4251),
+                            CreatedAt = new DateTime(2026, 2, 6, 4, 4, 48, 659, DateTimeKind.Utc).AddTicks(206),
                             Email = "admin@fixitup.com",
                             FullName = "System Administrator",
                             IsAcceptingJobs = false,

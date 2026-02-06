@@ -22,6 +22,7 @@ namespace FixItUp.Data
         public DbSet<WorkerSkill> WorkerSkills { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<Review> Reviews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -204,6 +205,42 @@ namespace FixItUp.Data
                       .WithMany()
                       .HasForeignKey(p => p.WorkerId)
                       .OnDelete(DeleteBehavior.NoAction);
+            });
+
+            // ======================
+            // REVIEW CONFIGURATION
+            // ======================
+            modelBuilder.Entity<Review>(entity =>
+            {
+                entity.Property(r => r.Rating)
+                      .IsRequired();
+
+                entity.Property(r => r.Comment)
+                      .IsRequired();
+
+                entity.Property(r => r.IsVerified)
+                      .HasDefaultValue(true);
+
+                entity.Property(r => r.CreatedAt)
+                      .HasDefaultValueSql("GETUTCDATE()");
+
+                // Task relationship with restrict to avoid cascade cycles
+                entity.HasOne(r => r.Task)
+                      .WithMany()
+                      .HasForeignKey(r => r.TaskId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // Customer relationship with restrict to avoid cascade cycles
+                entity.HasOne(r => r.Customer)
+                      .WithMany()
+                      .HasForeignKey(r => r.CustomerId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // Worker relationship with restrict to avoid cascade cycles
+                entity.HasOne(r => r.Worker)
+                      .WithMany()
+                      .HasForeignKey(r => r.WorkerId)
+                      .OnDelete(DeleteBehavior.Restrict);
             });
         }
     }

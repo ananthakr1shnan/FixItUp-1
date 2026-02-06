@@ -4,6 +4,7 @@ using FixItUp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FixItUp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260205120732_Tablesaddedd")]
+    partial class Tablesaddedd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -175,51 +178,6 @@ namespace FixItUp.Migrations
                     b.HasIndex("WorkerId");
 
                     b.ToTable("Payments");
-                });
-
-            modelBuilder.Entity("FixItUp.Models.Review", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsVerified")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TaskId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WorkerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("TaskId");
-
-                    b.HasIndex("WorkerId");
-
-                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("FixItUp.Models.ServiceCategory", b =>
@@ -486,7 +444,7 @@ namespace FixItUp.Migrations
                             AvailableBalance = 0m,
                             AvgResponseTime = 0,
                             City = "",
-                            CreatedAt = new DateTime(2026, 2, 6, 4, 6, 50, 177, DateTimeKind.Utc).AddTicks(4251),
+                            CreatedAt = new DateTime(2026, 2, 5, 12, 7, 31, 637, DateTimeKind.Utc).AddTicks(700),
                             Email = "admin@fixitup.com",
                             FullName = "System Administrator",
                             IsAcceptingJobs = false,
@@ -553,33 +511,6 @@ namespace FixItUp.Migrations
                         .WithMany()
                         .HasForeignKey("WorkerId")
                         .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Task");
-
-                    b.Navigation("Worker");
-                });
-
-            modelBuilder.Entity("FixItUp.Models.Review", b =>
-                {
-                    b.HasOne("FixItUp.Models.User", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("FixItUp.Models.TaskEntity", "Task")
-                        .WithMany()
-                        .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("FixItUp.Models.User", "Worker")
-                        .WithMany()
-                        .HasForeignKey("WorkerId")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Customer");
