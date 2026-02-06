@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FixItUp.Migrations
 {
     /// <inheritdoc />
-    public partial class Reviewtableadded : Migration
+    public partial class AddReviewsTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,8 +22,8 @@ namespace FixItUp.Migrations
                     WorkerId = table.Column<int>(type: "int", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsVerified = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    IsVerified = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -33,19 +33,19 @@ namespace FixItUp.Migrations
                         column: x => x.TaskId,
                         principalTable: "Tasks",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Reviews_Users_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Reviews_Users_WorkerId",
                         column: x => x.WorkerId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.UpdateData(
@@ -53,7 +53,7 @@ namespace FixItUp.Migrations
                 keyColumn: "Id",
                 keyValue: 999,
                 column: "CreatedAt",
-                value: new DateTime(2026, 2, 6, 3, 57, 31, 563, DateTimeKind.Utc).AddTicks(7022));
+                value: new DateTime(2026, 2, 6, 4, 24, 22, 47, DateTimeKind.Utc).AddTicks(2062));
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_CustomerId",

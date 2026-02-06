@@ -486,7 +486,7 @@ namespace FixItUp.Migrations
                             AvailableBalance = 0m,
                             AvgResponseTime = 0,
                             City = "",
-                            CreatedAt = new DateTime(2026, 2, 6, 4, 6, 50, 177, DateTimeKind.Utc).AddTicks(4251),
+                            CreatedAt = new DateTime(2026, 2, 6, 4, 24, 22, 47, DateTimeKind.Utc).AddTicks(2062),
                             Email = "admin@fixitup.com",
                             FullName = "System Administrator",
                             IsAcceptingJobs = false,

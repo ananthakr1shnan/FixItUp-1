@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FixItUp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260206040450_reviewcreated")]
-    partial class reviewcreated
+    [Migration("20260206042423_AddReviewsTable")]
+    partial class AddReviewsTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -489,7 +489,7 @@ namespace FixItUp.Migrations
                             AvailableBalance = 0m,
                             AvgResponseTime = 0,
                             City = "",
-                            CreatedAt = new DateTime(2026, 2, 6, 4, 4, 48, 659, DateTimeKind.Utc).AddTicks(206),
+                            CreatedAt = new DateTime(2026, 2, 6, 4, 24, 22, 47, DateTimeKind.Utc).AddTicks(2062),
                             Email = "admin@fixitup.com",
                             FullName = "System Administrator",
                             IsAcceptingJobs = false,
